@@ -118,7 +118,9 @@ void read_data(string orders_info, string orders_number, string qualify, int day
 		order[i].time = (*itr2).Get_Order_Processing_Time();
 		order[i].time = order[i].time / 60; 
 		order[i].deadline = (*itr2).Get_Deadline();
-		
+		if (order[i].deadline == 0) {
+			order[i].deadline = 1; 
+		}
 		
 
 		order[i].group = 0; 

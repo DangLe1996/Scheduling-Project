@@ -49,7 +49,7 @@ int best_fit2() {
 			if (order[o].status == 1 && order[o].flag == 1) {
 				switch (order[o].priority)
 				{
-				case 1: assign(o, order[o].deadline - 2, order[o].group);
+				case 1: assign(o, order[o].deadline , order[o].group);
 					break;
 				case 2: assign(o, order[o].deadline, order[o].group);
 					break; 
@@ -60,33 +60,33 @@ int best_fit2() {
 					break;
 				}
 			}
-			//else {
-			//	if (order[o].status == 1) {
-			//		//cout << o << " " << order[o].group;
-			//		assign(o, 1, order[o].group);
-			//		//seed.erase(remove(seed.begin(), seed.end(), o), seed.end());
-			//	}
-			//	else if (order[o].flag == 1) {
-			//		//seed.erase(remove(seed.begin(), seed.end(), o), seed.end());
-			//		switch (order[o].priority)
-			//		{
-			//		case 1:
-			//			assign(o, order[o].deadline - 2, order[o].quali[0]);
-			//		case 2:
-			//			assign(o, order[o].deadline, order[o].quali[0]);
-			//		case 3:
-			//			assign(o, order[o].deadline + 1, order[o].quali[0]);
+			else {
+				if (order[o].status == 1) {
+					//cout << o << " " << order[o].group;
+					assign(o, 1, order[o].group);
+					//seed.erase(remove(seed.begin(), seed.end(), o), seed.end());
+				}
+				else if (order[o].flag == 1) { //flag = 1 means assembly takes more than 1 day
+					//seed.erase(remove(seed.begin(), seed.end(), o), seed.end());
+					switch (order[o].priority)
+					{
+					case 1: assign(o, order[o].deadline, order[o].quali[0]);
+						break; 
+					case 2: assign(o, order[o].deadline, order[o].quali[0]);
+						break;
+					case 3: assign(o, order[o].deadline + 1, order[o].quali[0]);
+						break; 
 
-			//		default:
-			//			break;
-			//		}
+					default:
+						break;
+					}
 
-			//	}
-			//	else if (order[o].status != 1 && order[o].flag != 1) {
+				}
+				else if (order[o].status != 1 && order[o].flag != 1) {
 
-			//		best_fit(o);
-			//	}
-			//}
+					best_fit(o);
+				}
+			}
 
 		}
 	
@@ -127,7 +127,7 @@ void print_a_schedule(int day, int month, int year) {
 	cout << endl;
 	for (int g = 1; g <= groups; g++) {
 		cout << "group " << g << endl;
-		for (int d = 1; d <= days; d++) {
+		for (int d = 1; d <= group[g].makespan; d++) {
 			cout << group[g].avai_time[d] << endl;
 		}
 		cout << endl;

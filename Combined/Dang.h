@@ -32,6 +32,7 @@ struct group_info {
 	int number; 
 	int capacity;
 	int numb_cell;
+	int makespan; 
 	vector<double> avai_time;
 	vector<int> cells;
 
