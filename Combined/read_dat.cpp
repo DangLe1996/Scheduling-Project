@@ -88,7 +88,7 @@ void read_data(string orders_info, string orders_number, string qualify, int day
 	//bool Compare_(Product)
 
 
-	for (itr1 = Order_Numbers.begin() + 1; itr1 != Order_Numbers.end(); ++itr1)
+	for (itr1 = Order_Numbers.begin()  ; itr1 != Order_Numbers.end(); itr1++)
 	{
 		Temp.clear();
 
@@ -111,7 +111,8 @@ void read_data(string orders_info, string orders_number, string qualify, int day
 
 	
 	int i = 1; 
-	for (itr2 = Orders.begin()+1; itr2 != Orders.end(); itr2++, i++) {
+	for (itr2 = Orders.begin(); itr2 != Orders.end(); itr2++, i++) {
+
 		order[i].number = (*itr2).Get_Order_ID();
 		order[i].priority = (*itr2).Get_Priority();
 		order[i].time = (*itr2).Get_Order_Processing_Time();
