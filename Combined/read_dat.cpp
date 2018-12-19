@@ -96,7 +96,7 @@ void read_data(string orders_info, string orders_number, string qualify, int day
 	{
 		Temp.clear();
 
-		copy_if(Products.begin(), Products.end(), back_inserter(Temp),
+		copy_if(Products.begin()+ 1, Products.end(), back_inserter(Temp),
 			[&](auto i)
 		{
 			if (i.Get_Order_ID() == *itr1)
@@ -129,7 +129,8 @@ void read_data(string orders_info, string orders_number, string qualify, int day
 
 		order[i].group = -1; 
 	}
-		
+	
+
 
 
 
@@ -188,61 +189,10 @@ void read_data(string orders_info, string orders_number, string qualify, int day
 	group[4].number = 10;
 	group[5].number = 12; 
 
-	int index = 1; 
-	machine saw;
-	saw.init_machine("saw", 7.5, 8,index);
-	machines.push_back(saw); 
-
-	index++; 
-	machine cnc;
-	saw.init_machine("cnc", 7.5, 4, index);
-	machines.push_back(cnc);
-	index++;
-	machine milling;
-	saw.init_machine("milling", 7.5, 1, index);
-	machines.push_back(milling);
-	index++;
-	machine punch;
-	saw.init_machine("punching", 7.5, 1, index);
-	machines.push_back(punch);
-	index++;
-	machine welding;
-	saw.init_machine("welding", 7.5, 3, index);
-	machines.push_back(welding);
+	init_machines(); 
 	
-	index++;
-	machine h_assembly;
-	h_assembly.init_machine("Housing Assembly", 7.5, 4, index);
-	machines.push_back(h_assembly);
 
-	index++;
-	machine lens;
-	saw.init_machine("lens", 7.5, 7, index);
-	machines.push_back(lens);
-
-	cout << machines[0].capacity; 
-
-	index = 1; 
-	sequence seq1; 
-	vector<int> s1 = { saw.number, milling.number, punch.number };
-	seq1.init_seq(s1, index); 
-	sequences.push_back(seq1);
-	index++; 
-	sequence seq2;
-	vector<int> s2 = { saw.number, milling.number, punch.number, welding.number, h_assembly.number };
-	seq2.init_seq(s2, index);
-	sequences.push_back(seq2);
-	index++;
-	sequence seq3;
-	vector<int> s3 = { saw.number, lens.number};
-	seq2.init_seq(s3, index);
-	sequences.push_back(seq3);
-	index++;
-	sequence seq4;
-	vector<int> s4 = { saw.number, milling.number, punch.number, h_assembly.number };
-	seq2.init_seq(s4, index);
-	sequences.push_back(seq4);
-
+	
 
 	ifstream myfile(qualify);
 	//cout << "File name is: " << filename << endl;
@@ -268,9 +218,37 @@ void read_data(string orders_info, string orders_number, string qualify, int day
 		int min = 1;
 		int randNum = rand() % (max - min + 1) + min;
 		order[o].status = randNum;
+
+		max = 20; 
+		min = 1; 
+		randNum = rand() % (max - min + 1) + min;
+		for (int s = 1; s < randNum; s++) {
+			max = 4;
+			min = 1;
+			int rand2 = rand() % (max - min + 1) + min;
+			sub_orders sub(rand2); 
+			order[o].sub_order.push_back(sub); 
+			
+		}
+
+		
+
+
+
+
 		order[o].flag = 0;
 
 	}
+
+
+
+	for (auto seq : sequences) {
+		cout << seq.number << endl; 
+	}
+
+
+
+
 
 //	print_orders();
 
@@ -280,3 +258,62 @@ void read_data(string orders_info, string orders_number, string qualify, int day
 }
 
 
+void init_machines() {
+
+	int max = 15;
+	int min = 3;
+	int rand2 = rand() % (max - min + 1) + min;
+	int index = 1;
+	machine saw("saw", 7.5, 8, index, rand2);
+	machines.push_back(saw);
+	rand2 = rand() % (max - min + 1) + min;
+	index++;
+	machine cnc("cnc", 7.5, 4, index, rand2);
+	machines.push_back(cnc);
+	rand2 = rand() % (max - min + 1) + min;
+	index++;
+	machine milling("milling", 7.5, 1, index, rand2);
+	machines.push_back(milling);
+	rand2 = rand() % (max - min + 1) + min;
+	index++;
+	machine punch("punching", 7.5, 1, index, rand2);
+	machines.push_back(punch);
+	rand2 = rand() % (max - min + 1) + min;
+	index++;
+	machine welding("welding", 7.5, 3, index, rand2);
+	machines.push_back(welding);
+	rand2 = rand() % (max - min + 1) + min;
+	index++;
+	machine h_assembly("Housing Assembly", 7.5, 4, index, rand2);
+	machines.push_back(h_assembly);
+	rand2 = rand() % (max - min + 1) + min;
+	index++;
+	machine lens("lens", 7.5, 7, index, rand2);
+	machines.push_back(lens);
+
+	cout << machines[0].capacity;
+
+	index = 1;
+
+	vector<machine> s = { saw, milling, punch };
+	sequence seq1(s, index);
+	sequences.push_back(seq1);
+	index++;
+	s.clear(); 
+	s = { saw, milling, punch, welding, h_assembly };
+	sequence seq2(s, index);
+	sequences.push_back(seq2);
+	index++;
+
+	s.clear();
+	 s = { saw, lens };
+	sequence seq3(s, index);
+	sequences.push_back(seq3);
+	index++;
+	s.clear();
+	s = { saw, milling, punch, h_assembly };
+	sequence seq4(s, index);
+	sequences.push_back(seq4);
+
+
+}

@@ -41,30 +41,33 @@ struct group_info {
 
 struct machine {
 	string name; 
-	//vector<double> avai_time;
 	int number; 
 	int capacity;
 	int number_of_machine;
-	void init_machine(string n, int c, int m, int num ) {
+	int p_time; 
+	machine(string n, int c, int m, int num , int p) {
 		capacity = c; 
 		name = n; 
 		number_of_machine = m; 
 		capacity = c * m; 
 		number = num; 
-
+		p_time = p; 
 	}
 };
 struct sequence {
-	vector<int> machine; 
+	vector<machine> m; 
 	int number; 
-	void init_seq(vector<int> v1, int n) {
-		machine = v1; 
+	sequence(vector<machine> v1, int n) {
+		m = v1; 
 		number = n; 
 	}
 };
 struct sub_orders {
 	int seq_number;
-
+	sub_orders(int n) {
+		seq_number = n; 
+	}
+	int finish_time; 
 };
 struct order_info {
 	int number;
@@ -81,7 +84,7 @@ struct order_info {
 };
 
 
-
+void init_machines(); 
 
 bool compare_deadline(order_info a, order_info b);
 bool compare_status(int a, int b);
