@@ -123,7 +123,7 @@ void read_data(string orders_info, string orders_number, string qualify, int day
 		}
 		
 
-		order[i].group = 0; 
+		//order[i].group = 0; 
 	}
 		
 
@@ -131,34 +131,9 @@ void read_data(string orders_info, string orders_number, string qualify, int day
 
 
 	
-	ifstream myfile(qualify);
-	//cout << "File name is: " << filename << endl;
-	string line; 
-	char delimiter; 
-	getline(myfile, line);
-	stringstream iss(line);
-	for (int o = 1; o <= orders; o++) {
-		getline(myfile, line);
-		stringstream iss(line);
-		int num;
-		while (!iss.eof()) {
-			iss >> num;
-			if (num == 4) num = 2;
-			if (num == 7) num = 3;
-			if (num == 10) num = 4;
-			if (num == 12) num = 5;
-			order[o].quali.push_back(num);
-			iss >> delimiter;
-		}
-		order[o].quali.pop_back(); 
-		int max = 5;
-		int min = 1;
-		int randNum = rand() % (max - min + 1) + min;
-		order[o].status = randNum;
-		order[o].flag = 0; 
-		
-	}
 
+
+	
 	
 
 	for (int i = 1; i <= 3; i++) {
@@ -186,7 +161,7 @@ void read_data(string orders_info, string orders_number, string qualify, int day
 		
 		group[i].capacity = cap*group[i].cells.size();
 		//cout << group[i].capacity << endl; 
-		
+		group[i].current_useage = 0; 
 		for (int j = 0; j <= days; j++) {
 
 			group[i].avai_time.push_back(group[i].capacity);
@@ -208,6 +183,38 @@ void read_data(string orders_info, string orders_number, string qualify, int day
 	group[3].number = 7;
 	group[4].number = 10;
 	group[5].number = 12; 
+
+
+	ifstream myfile(qualify);
+	//cout << "File name is: " << filename << endl;
+	string line;
+	char delimiter;
+	getline(myfile, line);
+	stringstream iss(line);
+	for (int o = 1; o <= orders; o++) {
+		getline(myfile, line);
+		stringstream iss(line);
+		int num;
+		while (!iss.eof()) {
+			iss >> num;
+			if (num == 4) num = 2;
+			else if (num == 7) num = 3;
+			else if (num == 10) num = 4;
+			else if (num == 12) num = 5;
+			order[o].quali.push_back(num);
+			iss >> delimiter;
+		}
+		order[o].quali.pop_back();
+		int max = 5;
+		int min = 1;
+		int randNum = rand() % (max - min + 1) + min;
+		order[o].status = randNum;
+		order[o].flag = 0;
+
+	}
+
+//	print_orders();
+
 
 	//sort(order.begin(), order.end(), compare); 
 	//std::sort(order.begin(), order.end());

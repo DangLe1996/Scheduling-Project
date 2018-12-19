@@ -7,7 +7,7 @@ int best_fit2() {
 	for (int o = 1; o <= orders; o++) {
 
 		if ( order[o].deadline <= days && order[o].status > 0) {
-			if (order[o].status == 1) order[o].group = order[o].quali[0];
+			if (order[o].status == 1) order[o].group = group[order[o].quali[0]].number;
 					seed.push_back(o);
 					flag = 1;
 		for (int g : order[o].quali) {
@@ -24,71 +24,85 @@ int best_fit2() {
 		}
 	}
 	if (flag == 0) return 0;
-	for (int o : seed) {
-		cout << order[o].status << " " << order[o].number << " " << o << " " << order[o].group << endl;
-	}
+	
 	
 	sort(seed.begin(), seed.end(), compare_status);
 	cout << endl; 
-	for (int o : seed) {
-		cout << order[o].status << " "<<  order[o].number << " " << o << " " << order[o].group << endl; 
-	}
+	
 	int best_sol = INT_MAX;
 	int max_day = 0;
-
-
-
-	auto rng = std::default_random_engine{};
 
 
 	int day = 1;
 
 
-		for (int o : seed) {
-			cout << " " << o << " " << order[o].number << " " << order[o].priority << " " << order[o].flag << " " << order[o].status << endl; 
-			if (order[o].status == 1 && order[o].flag == 1) {
-				switch (order[o].priority)
-				{
-				case 1: assign(o, order[o].deadline , order[o].group);
-					break;
-				case 2: assign(o, order[o].deadline, order[o].group);
-					break; 
-				case 3: assign(o, order[o].deadline + 1, order[o].group);
-					break; 
+	for (int o : seed) {
 
-				default:
-					break;
-				}
-			}
-			else {
-				if (order[o].status == 1) {
-					//cout << o << " " << order[o].group;
-					assign(o, 1, order[o].group);
-					//seed.erase(remove(seed.begin(), seed.end(), o), seed.end());
-				}
-				else if (order[o].flag == 1) { //flag = 1 means assembly takes more than 1 day
-					//seed.erase(remove(seed.begin(), seed.end(), o), seed.end());
-					switch (order[o].priority)
-					{
-					case 1: assign(o, order[o].deadline, order[o].quali[0]);
-						break; 
-					case 2: assign(o, order[o].deadline, order[o].quali[0]);
-						break;
-					case 3: assign(o, order[o].deadline + 1, order[o].quali[0]);
-						break; 
+		sort(order[o].quali.begin(), order[o].quali.end(), compare_groups);
+		int k = order[o].quali[0];
+		assign(o, k); 
+		
+		
+		//cout <<o << " " << order[o].group.current_useage << endl;
 
-					default:
-						break;
-					}
+	}
 
-				}
-				else if (order[o].status != 1 && order[o].flag != 1) {
 
-					best_fit(o);
-				}
-			}
+	print_orders(); 
+	
+	for (int g = 1; g <= groups; g++) {
+		cout << g << " " << group[g].current_useage << " " << group[g].makespan<<  endl;
+	}
 
-		}
+
+
+
+
+		//for (int o : seed) {
+		//	cout << " " << o << " " << order[o].number << " " << order[o].priority << " " << order[o].flag << " " << order[o].status << endl; 
+		//	if (order[o].status == 1 && order[o].flag == 1) {
+		//		switch (order[o].priority)
+		//		{
+		//		case 1: assign(o, order[o].deadline , order[o].group);
+		//			break;
+		//		case 2: assign(o, order[o].deadline, order[o].group);
+		//			break; 
+		//		case 3: assign(o, order[o].deadline + 1, order[o].group);
+		//			break; 
+
+		//		default:
+		//			break;
+		//		}
+		//	}
+		//	else {
+		//		if (order[o].status == 1) {
+		//			//cout << o << " " << order[o].group;
+		//			assign(o, 1, order[o].group);
+		//			//seed.erase(remove(seed.begin(), seed.end(), o), seed.end());
+		//		}
+		//		else if (order[o].flag == 1) { //flag = 1 means assembly takes more than 1 day
+		//			//seed.erase(remove(seed.begin(), seed.end(), o), seed.end());
+		//			switch (order[o].priority)
+		//			{
+		//			case 1: assign(o, order[o].deadline, order[o].quali[0]);
+		//				break; 
+		//			case 2: assign(o, order[o].deadline, order[o].quali[0]);
+		//				break;
+		//			case 3: assign(o, order[o].deadline + 1, order[o].quali[0]);
+		//				break; 
+
+		//			default:
+		//				break;
+		//			}
+
+		//		}
+		//		else if (order[o].status != 1 && order[o].flag != 1) {
+
+		//			best_fit(o);
+		//		}
+		//	}
+
+		//}
 	
 
 	//sort(order + 1, order + orders, compare_number);
@@ -105,33 +119,33 @@ int best_fit2() {
 void print_a_schedule(int day, int month, int year) {
 	ofstream output("output.csv");
 
-	cout << "order " << " " << "group" << " " << "day " << " " << "deadline" << " " << "priority" << endl;
-	output << "order ," << " " << "group," << " " << "day ," << " " << "deadline," << "priority" << endl;
-	for (int o = 1; o <= orders; o++) {
-		if (order[o].group > 0) {
-			string date;
-			ostringstream schedule_date, duedate;
-			schedule_date << order[o].day + day << " - " << month << " - " << year;
-			duedate << order[o].deadline + day << " - " << month << " - " << year;
-			/*if (order[o].day - 1 + day > 30) {
-			date = { } +"/" + month + 1 + '/' + year;
-			}
-			else date = order[o].day - 1 + day + "/" + month  + '/' + year;*/
+	//cout << "order " << " " << "group" << " " << "day " << " " << "deadline" << " " << "priority" << endl;
+	//output << "order ," << " " << "group," << " " << "day ," << " " << "deadline," << "priority" << endl;
+	//for (int o = 1; o <= orders; o++) {
+	//	if (order[o].group > 0) {
+	//		string date;
+	//		ostringstream schedule_date, duedate;
+	//		schedule_date << order[o].day + day << " - " << month << " - " << year;
+	//		duedate << order[o].deadline + day << " - " << month << " - " << year;
+	//		/*if (order[o].day - 1 + day > 30) {
+	//		date = { } +"/" + month + 1 + '/' + year;
+	//		}
+	//		else date = order[o].day - 1 + day + "/" + month  + '/' + year;*/
 
-			cout << order[o].number << "\t " << order[o].group << " \t" << schedule_date.str() << "\t " << duedate.str()
-				<< "\t " << order[o].priority << " " << order[o].status << " " << order[o].time << endl;
-			output << order[o].number << ", " << order[o].group << " ," << schedule_date.str() << ", " << duedate.str() << ", " << order[o].priority << endl;
-		}
+	//		cout << order[o].number << "\t " << order[o].group << " \t" << schedule_date.str() << "\t " << duedate.str()
+	//			<< "\t " << order[o].priority << " " << order[o].status << " " << order[o].time << endl;
+	//		output << order[o].number << ", " << order[o].group << " ," << schedule_date.str() << ", " << duedate.str() << ", " << order[o].priority << endl;
+	//	}
 
-	}
-	cout << endl;
-	for (int g = 1; g <= groups; g++) {
-		cout << "group " << g << endl;
-		for (int d = 1; d <= group[g].makespan; d++) {
-			cout << group[g].avai_time[d] << endl;
-		}
-		cout << endl;
-	}
+	//}
+	//cout << endl;
+	//for (int g = 1; g <= groups; g++) {
+	//	cout << "group " << g << endl;
+	//	for (int d = 1; d <= group[g].makespan; d++) {
+	//		cout << group[g].avai_time[d] << endl;
+	//	}
+	//	cout << endl;
+	//}
 
 }
 
@@ -151,7 +165,7 @@ void best_fit(int o) {
 	auto rng = std::default_random_engine{};
 
 	std::shuffle(order[o].quali.begin(), order[o].quali.end(), rng);
-	for (int d = 1; d <= days; d++) {
+	/*for (int d = 1; d <= days; d++) {
 		for (int g : order[o].quali) {
 
 			int value = group[g].avai_time[d] - order[o].time;
@@ -164,7 +178,7 @@ void best_fit(int o) {
 			}
 		}
 
-	}
+	}*/
 	/*if(min != INT_MAX)
 	assign(o, best_day, best_group); 
 	else cout << "Order " << o << " cannot be assigned due to capacity"; */
@@ -172,7 +186,7 @@ void best_fit(int o) {
 }
 
 void improve_solution() {
-	for (int o = 1; o <= orders; o++) {
+	/*for (int o = 1; o <= orders; o++) {
 		bool gotoMainLoop = false;
 		if (order[o].group > 0 && order[o].status != 1) {
 			for (int d = 1; d < order[d].day && !gotoMainLoop; d++) {
@@ -187,7 +201,7 @@ void improve_solution() {
 		}
 
 	}
-
+*/
 
 
 
