@@ -119,33 +119,33 @@ int best_fit2() {
 void print_a_schedule(int day, int month, int year) {
 	ofstream output("output.csv");
 
-	//cout << "order " << " " << "group" << " " << "day " << " " << "deadline" << " " << "priority" << endl;
-	//output << "order ," << " " << "group," << " " << "day ," << " " << "deadline," << "priority" << endl;
-	//for (int o = 1; o <= orders; o++) {
-	//	if (order[o].group > 0) {
-	//		string date;
-	//		ostringstream schedule_date, duedate;
-	//		schedule_date << order[o].day + day << " - " << month << " - " << year;
-	//		duedate << order[o].deadline + day << " - " << month << " - " << year;
-	//		/*if (order[o].day - 1 + day > 30) {
-	//		date = { } +"/" + month + 1 + '/' + year;
-	//		}
-	//		else date = order[o].day - 1 + day + "/" + month  + '/' + year;*/
+	cout << "order " << " " << "group" << " " << "day " << " " << "deadline" << " " << "priority" << endl;
+	output << "order ," << " " << "group," << " " << "day ," << " " << "deadline," << "priority" << endl;
+	for (int o = 1; o <= orders; o++) {
+		if (order[o].group > 0) {
+			string date;
+			ostringstream schedule_date, duedate;
+			schedule_date << order[o].day + day << " - " << month << " - " << year;
+			duedate << order[o].deadline + day << " - " << month << " - " << year;
+			/*if (order[o].day - 1 + day > 30) {
+			date = { } +"/" + month + 1 + '/' + year;
+			}
+			else date = order[o].day - 1 + day + "/" + month  + '/' + year;*/
 
-	//		cout << order[o].number << "\t " << order[o].group << " \t" << schedule_date.str() << "\t " << duedate.str()
-	//			<< "\t " << order[o].priority << " " << order[o].status << " " << order[o].time << endl;
-	//		output << order[o].number << ", " << order[o].group << " ," << schedule_date.str() << ", " << duedate.str() << ", " << order[o].priority << endl;
-	//	}
+			cout << order[o].number << "\t " << order[o].group << " \t" << schedule_date.str() << "\t " << duedate.str()
+				<< "\t " << order[o].priority << " " << order[o].status << " " << order[o].time << endl;
+			output << order[o].number << ", " << order[o].group << " ," << schedule_date.str() << ", " << duedate.str() << ", " << order[o].priority << endl;
+		}
 
-	//}
-	//cout << endl;
-	//for (int g = 1; g <= groups; g++) {
-	//	cout << "group " << g << endl;
-	//	for (int d = 1; d <= group[g].makespan; d++) {
-	//		cout << group[g].avai_time[d] << endl;
-	//	}
-	//	cout << endl;
-	//}
+	}
+	cout << endl;
+	for (int g = 1; g <= groups; g++) {
+		cout << "group " << g << endl;
+		//for (int d = 1; d <= group[g].makespan; d++) {
+			cout << group[g].current_useage << endl;
+		//}
+		cout << endl;
+	}
 
 }
 

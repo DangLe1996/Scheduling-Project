@@ -45,9 +45,13 @@ void read_data(string orders_info, string orders_number, string qualify, int day
 	//copy(Order_Numbers.begin(), Order_Numbers.end(), ostream_iterator<int>(cout, "\n"));
 
 	groups = 5; 
-	machines = 7;
+	
 
-	machine = new machine_info[machines + 1];
+	
+	
+
+
+
 	group = new group_info[groups + 1];
 	order = new order_info[Order_Numbers.size() + 1];
 	orders = Order_Numbers.size(); 
@@ -118,12 +122,12 @@ void read_data(string orders_info, string orders_number, string qualify, int day
 		order[i].time = (*itr2).Get_Order_Processing_Time();
 		order[i].time = order[i].time / 60; 
 		order[i].deadline = (*itr2).Get_Deadline();
-		if (order[i].deadline == 0) {
+		if (order[i].deadline <= 0) {
 			order[i].deadline = 1; 
 		}
 		
 
-		//order[i].group = 0; 
+		order[i].group = -1; 
 	}
 		
 
@@ -168,7 +172,7 @@ void read_data(string orders_info, string orders_number, string qualify, int day
 		}
 	}
 
-	for (int j = 1; j <= machines; j++) {
+	/*for (int j = 1; j <= machines; j++) {
 		machine[j].number_of_machine = 5; 
 		machine[j].capacity = 7; 
 		machine[j].capacity = machine[j].number_of_machine * machine[j].capacity; 
@@ -176,13 +180,68 @@ void read_data(string orders_info, string orders_number, string qualify, int day
 
 			machine[j].avai_time.push_back(machine[j].capacity);
 		}
-	}
+	}*/
 
 	group[1].number = 1;
 	group[2].number = 4;
 	group[3].number = 7;
 	group[4].number = 10;
 	group[5].number = 12; 
+
+	int index = 1; 
+	machine saw;
+	saw.init_machine("saw", 7.5, 8,index);
+	machines.push_back(saw); 
+
+	index++; 
+	machine cnc;
+	saw.init_machine("cnc", 7.5, 4, index);
+	machines.push_back(cnc);
+	index++;
+	machine milling;
+	saw.init_machine("milling", 7.5, 1, index);
+	machines.push_back(milling);
+	index++;
+	machine punch;
+	saw.init_machine("punching", 7.5, 1, index);
+	machines.push_back(punch);
+	index++;
+	machine welding;
+	saw.init_machine("welding", 7.5, 3, index);
+	machines.push_back(welding);
+	
+	index++;
+	machine h_assembly;
+	h_assembly.init_machine("Housing Assembly", 7.5, 4, index);
+	machines.push_back(h_assembly);
+
+	index++;
+	machine lens;
+	saw.init_machine("lens", 7.5, 7, index);
+	machines.push_back(lens);
+
+	cout << machines[0].capacity; 
+
+	index = 1; 
+	sequence seq1; 
+	vector<int> s1 = { saw.number, milling.number, punch.number };
+	seq1.init_seq(s1, index); 
+	sequences.push_back(seq1);
+	index++; 
+	sequence seq2;
+	vector<int> s2 = { saw.number, milling.number, punch.number, welding.number, h_assembly.number };
+	seq2.init_seq(s2, index);
+	sequences.push_back(seq2);
+	index++;
+	sequence seq3;
+	vector<int> s3 = { saw.number, lens.number};
+	seq2.init_seq(s3, index);
+	sequences.push_back(seq3);
+	index++;
+	sequence seq4;
+	vector<int> s4 = { saw.number, milling.number, punch.number, h_assembly.number };
+	seq2.init_seq(s4, index);
+	sequences.push_back(seq4);
 
 
 	ifstream myfile(qualify);
@@ -219,3 +278,5 @@ void read_data(string orders_info, string orders_number, string qualify, int day
 	//sort(order.begin(), order.end(), compare); 
 	//std::sort(order.begin(), order.end());
 }
+
+

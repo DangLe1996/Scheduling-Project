@@ -24,7 +24,7 @@
 
 using namespace std;
 
-extern int orders, days, groups, machines;
+extern int orders, days, groups;
 
 
 
@@ -39,14 +39,33 @@ struct group_info {
 
 };
 
-struct machine_info {
+struct machine {
 	string name; 
-	vector<double> avai_time;
+	//vector<double> avai_time;
+	int number; 
 	int capacity;
 	int number_of_machine;
+	void init_machine(string n, int c, int m, int num ) {
+		capacity = c; 
+		name = n; 
+		number_of_machine = m; 
+		capacity = c * m; 
+		number = num; 
+
+	}
+};
+struct sequence {
+	vector<int> machine; 
+	int number; 
+	void init_seq(vector<int> v1, int n) {
+		machine = v1; 
+		number = n; 
+	}
+};
+struct sub_orders {
+	int seq_number;
 
 };
-
 struct order_info {
 	int number;
 	int group;
@@ -54,18 +73,23 @@ struct order_info {
 	double time;
 	int deadline;
 	vector<int> quali;
-	vector<int> m_seq;
+	vector<sub_orders> sub_order; 
+	int sequence; 
 	int priority;
 	int status; 
 	int flag; 
 };
 
 
+
+
 bool compare_deadline(order_info a, order_info b);
 bool compare_status(int a, int b);
 bool compare_number(order_info a, order_info b);
 extern order_info * order;
-extern machine_info * machine;
+extern vector <machine> machines;
+extern vector <sequence> sequences;
+
 extern group_info * group;
 void best_fit(int o);
 void solve_MIP();
@@ -79,3 +103,4 @@ void improve_solution();
 void print_a_schedule(int day, int month, int year);
 bool compare_groups(int a, int b);
 void print_orders();
+ 
