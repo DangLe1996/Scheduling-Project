@@ -239,8 +239,10 @@ void read_data(string orders_info, string orders_number, string qualify, int day
 		order[o].flag = 0;
 
 	}
-
-
+	cout << endl; 
+	cout << machines[0].capacity << endl; 
+	cout << sequences[0].number << endl; 
+	cout << machines[sequences[0].m[0]].capacity; 
 
 	for (auto seq : sequences) {
 		cout << seq.number << endl; 
@@ -263,7 +265,7 @@ void init_machines() {
 	int max = 15;
 	int min = 3;
 	int rand2 = rand() % (max - min + 1) + min;
-	int index = 1;
+	int index = 0;
 	machine saw("saw", 7.5, 8, index, rand2);
 	machines.push_back(saw);
 	rand2 = rand() % (max - min + 1) + min;
@@ -295,23 +297,25 @@ void init_machines() {
 
 	index = 1;
 
-	vector<machine> s = { saw, milling, punch };
+	//vector<machine*> s = { &saw, &milling, &punch };
+	vector<int> s = { saw.number, milling.number, punch.number };
+
 	sequence seq1(s, index);
 	sequences.push_back(seq1);
 	index++;
 	s.clear(); 
-	s = { saw, milling, punch, welding, h_assembly };
+	s = { saw.number, milling.number, punch.number, welding.number, h_assembly.number };
 	sequence seq2(s, index);
 	sequences.push_back(seq2);
 	index++;
 
 	s.clear();
-	 s = { saw, lens };
+	 s = { saw.number, lens.number };
 	sequence seq3(s, index);
 	sequences.push_back(seq3);
 	index++;
 	s.clear();
-	s = { saw, milling, punch, h_assembly };
+	s = { saw.number, milling.number, punch.number, h_assembly.number };
 	sequence seq4(s, index);
 	sequences.push_back(seq4);
 

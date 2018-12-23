@@ -54,10 +54,18 @@ struct machine {
 		p_time = p; 
 	}
 };
+//struct sequence {
+//	vector<machine*> m; 
+//	int number; 
+//	sequence(vector<machine*> v1, int n) {
+//		m = v1; 
+//		number = n; 
+//	}
+//};
 struct sequence {
-	vector<machine> m; 
+	vector<int> m; 
 	int number; 
-	sequence(vector<machine> v1, int n) {
+	sequence(vector<int> v1, int n) {
 		m = v1; 
 		number = n; 
 	}

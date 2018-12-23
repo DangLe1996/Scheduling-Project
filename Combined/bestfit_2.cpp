@@ -1,20 +1,30 @@
 #include "pch.h"
 int best_fit2() {
 
-
+	int k;
 	vector<int> seed;
 	int flag = 0;
 	for (int o = 1; o <= orders; o++) {
-
+		//check if order is within schedule horizon and available to schedule
 		if ( order[o].deadline <= days && order[o].status > 0) {
-			if (order[o].status == 1) order[o].group = group[order[o].quali[0]].number;
-					seed.push_back(o);
-					flag = 1;
+			//check if order status is "Assembly started", the assign to the first qualified group
+			//assuming that only 1 group qualified to assemble it. 
+			if (order[o].status == 1) {
+				k =order[o].quali[0];
+				assign(o, k);
+				
+
+			}
+			else {
+				seed.push_back(o);
+			}
+			flag = 1;
 		for (int g : order[o].quali) {
 				if (order[o].time <= group[g].capacity) {
 					
 				}
 				else {
+					//check if there is an order that takes more than 1 day to assemble. 
 					cout << order[o].number << " has more time than capacity" << endl;
 					order[o].flag = 1; 
 					break; 
@@ -25,7 +35,7 @@ int best_fit2() {
 	}
 	if (flag == 0) return 0;
 	
-	
+	//sort the order by status, from 2 to 5. 
 	sort(seed.begin(), seed.end(), compare_status);
 	cout << endl; 
 	
@@ -37,13 +47,10 @@ int best_fit2() {
 
 
 	for (int o : seed) {
-
+		//sort the qualified group for the order by current useage. Assign to the lowest one. 
 		sort(order[o].quali.begin(), order[o].quali.end(), compare_groups);
-		int k = order[o].quali[0];
+		k = order[o].quali[0];
 		assign(o, k); 
-		
-		
-		//cout <<o << " " << order[o].group.current_useage << endl;
 
 	}
 
@@ -55,57 +62,6 @@ int best_fit2() {
 	}
 
 
-
-
-
-		//for (int o : seed) {
-		//	cout << " " << o << " " << order[o].number << " " << order[o].priority << " " << order[o].flag << " " << order[o].status << endl; 
-		//	if (order[o].status == 1 && order[o].flag == 1) {
-		//		switch (order[o].priority)
-		//		{
-		//		case 1: assign(o, order[o].deadline , order[o].group);
-		//			break;
-		//		case 2: assign(o, order[o].deadline, order[o].group);
-		//			break; 
-		//		case 3: assign(o, order[o].deadline + 1, order[o].group);
-		//			break; 
-
-		//		default:
-		//			break;
-		//		}
-		//	}
-		//	else {
-		//		if (order[o].status == 1) {
-		//			//cout << o << " " << order[o].group;
-		//			assign(o, 1, order[o].group);
-		//			//seed.erase(remove(seed.begin(), seed.end(), o), seed.end());
-		//		}
-		//		else if (order[o].flag == 1) { //flag = 1 means assembly takes more than 1 day
-		//			//seed.erase(remove(seed.begin(), seed.end(), o), seed.end());
-		//			switch (order[o].priority)
-		//			{
-		//			case 1: assign(o, order[o].deadline, order[o].quali[0]);
-		//				break; 
-		//			case 2: assign(o, order[o].deadline, order[o].quali[0]);
-		//				break;
-		//			case 3: assign(o, order[o].deadline + 1, order[o].quali[0]);
-		//				break; 
-
-		//			default:
-		//				break;
-		//			}
-
-		//		}
-		//		else if (order[o].status != 1 && order[o].flag != 1) {
-
-		//			best_fit(o);
-		//		}
-		//	}
-
-		//}
-	
-
-	//sort(order + 1, order + orders, compare_number);
 
 
 
@@ -206,3 +162,70 @@ void improve_solution() {
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//for (int o : seed) {
+//	cout << " " << o << " " << order[o].number << " " << order[o].priority << " " << order[o].flag << " " << order[o].status << endl; 
+//	if (order[o].status == 1 && order[o].flag == 1) {
+//		switch (order[o].priority)
+//		{
+//		case 1: assign(o, order[o].deadline , order[o].group);
+//			break;
+//		case 2: assign(o, order[o].deadline, order[o].group);
+//			break; 
+//		case 3: assign(o, order[o].deadline + 1, order[o].group);
+//			break; 
+
+//		default:
+//			break;
+//		}
+//	}
+//	else {
+//		if (order[o].status == 1) {
+//			//cout << o << " " << order[o].group;
+//			assign(o, 1, order[o].group);
+//			//seed.erase(remove(seed.begin(), seed.end(), o), seed.end());
+//		}
+//		else if (order[o].flag == 1) { //flag = 1 means assembly takes more than 1 day
+//			//seed.erase(remove(seed.begin(), seed.end(), o), seed.end());
+//			switch (order[o].priority)
+//			{
+//			case 1: assign(o, order[o].deadline, order[o].quali[0]);
+//				break; 
+//			case 2: assign(o, order[o].deadline, order[o].quali[0]);
+//				break;
+//			case 3: assign(o, order[o].deadline + 1, order[o].quali[0]);
+//				break; 
+
+//			default:
+//				break;
+//			}
+
+//		}
+//		else if (order[o].status != 1 && order[o].flag != 1) {
+
+//			best_fit(o);
+//		}
+//	}
+
+//}
+
+
+//sort(order + 1, order + orders, compare_number);
+
