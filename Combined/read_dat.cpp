@@ -239,14 +239,14 @@ void read_data(string orders_info, string orders_number, string qualify, int day
 		order[o].flag = 0;
 
 	}
-	cout << endl; 
+	/*cout << endl; 
 	cout << machines[0].capacity << endl; 
 	cout << sequences[0].number << endl; 
 	cout << machines[sequences[0].m[0]].capacity; 
 
 	for (auto seq : sequences) {
 		cout << seq.number << endl; 
-	}
+	}*/
 
 
 
@@ -293,7 +293,7 @@ void init_machines() {
 	machine lens("lens", 7.5, 7, index, rand2);
 	machines.push_back(lens);
 
-	cout << machines[0].capacity;
+	/*cout << machines[0].capacity;*/
 
 	index = 1;
 
